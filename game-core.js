@@ -106,8 +106,9 @@
       const word = (parts[0] || "").trim();
       const meaning = (parts[1] || "").trim();
       const partOfSpeech = (parts[2] || "명사").trim();
+      const grade = (parts[3] || "").trim();
       if (word && meaning && isHangulWord(word)) {
-        entries.push({ word: word, meaning: meaning, pos: partOfSpeech });
+        entries.push({ word: word, meaning: meaning, pos: partOfSpeech, grade: grade });
       }
     });
     return entries;
@@ -120,7 +121,8 @@
         byWord.set(entry.word, {
           word: entry.word,
           meaning: entry.meaning,
-          pos: entry.pos || "명사"
+          pos: entry.pos || "명사",
+          grade: entry.grade || "기존"
         });
       }
     });
@@ -199,6 +201,13 @@
     return result;
   }
 
+  function gradeRank(entry) {
+    if (!entry || !entry.grade || entry.grade === "기존" || entry.grade === "초급") {
+      return 0;
+    }
+    return 1;
+  }
+
   function chooseProgramWord(book, character, usedWords, random) {
     const generator = typeof random === "function" ? random : Math.random;
     const candidates = findCandidates(book, character, usedWords);
@@ -229,15 +238,21 @@
     } else if (readable.length > 0) {
       pool = readable;
     }
-    const shortest = Math.min.apply(null, pool.map(function (item) {
+    const bestRank = Math.min.apply(null, pool.map(function (item) {
+      return gradeRank(item.entry);
+    }));
+    const preferred = pool.filter(function (item) {
+      return gradeRank(item.entry) === bestRank;
+    });
+    const shortest = Math.min.apply(null, preferred.map(function (item) {
       return Array.from(item.entry.word).length;
     }));
     const friendlyLimit = Math.max(3, shortest + 1);
-    const friendly = pool.filter(function (item) {
+    const friendly = preferred.filter(function (item) {
       return Array.from(item.entry.word).length <= friendlyLimit;
     });
     const chosen = friendly[Math.floor(generator() * friendly.length)];
-    return chosen ? chosen.entry : pool[0].entry;
+    return chosen ? chosen.entry : preferred[0].entry;
   }
 
   function getHints(book, character, usedWords, count, random) {
@@ -252,12 +267,16 @@
       return {
         entry: entry,
         safe: continuations > 0,
+        rank: gradeRank(entry),
         length: Array.from(entry.word).length
       };
     });
     scored.sort(function (a, b) {
       if (a.safe !== b.safe) {
         return a.safe ? -1 : 1;
+      }
+      if (a.rank !== b.rank) {
+        return a.rank - b.rank;
       }
       if (a.length !== b.length) {
         return a.length - b.length;
@@ -269,8 +288,8 @@
       if (a.safe !== b.safe) {
         return a.safe ? -1 : 1;
       }
-      const aScore = a.length + (a.safe ? 0 : 20);
-      const bScore = b.length + (b.safe ? 0 : 20);
+      const aScore = a.rank * 100 + a.length + (a.safe ? 0 : 20);
+      const bScore = b.rank * 100 + b.length + (b.safe ? 0 : 20);
       return aScore - bScore;
     });
     return shuffled.slice(0, count || 3).map(function (item) {

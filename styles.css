@@ -1042,6 +1042,7 @@ button:disabled {
 
 .footer {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
@@ -1059,6 +1060,16 @@ button:disabled {
 .footer strong {
   color: #5b7569;
   font-weight: 800;
+}
+
+.footer-credit {
+  flex-basis: 100%;
+  font-size: 10.5px;
+}
+
+.footer a {
+  color: #5b7569;
+  text-underline-offset: 2px;
 }
 
 .dictionary-results::-webkit-scrollbar,
