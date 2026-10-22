@@ -1,0 +1,260 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbf6ea">
+  <meta name="description" content="초등학생을 위한 끝말잇기 놀이. 단어를 내면 뜻까지 함께 알려 주는 말잇기 탐험대입니다.">
+  <title>말잇기 탐험대 | 단어와 뜻을 함께 배우는 끝말잇기</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23fbf6ea'/%3E%3Cpath d='M14 22 24 10l4 12h8l4-12 10 12v18c0 8-7 14-18 14S14 48 14 40Z' fill='%23e9825d'/%3E%3Cpath d='M22 36c0 8 5 13 10 13s10-5 10-13Z' fill='%23fff6e8'/%3E%3Ccircle cx='25' cy='30' r='2.4' fill='%23313f39'/%3E%3Ccircle cx='39' cy='30' r='2.4' fill='%23313f39'/%3E%3Cpath d='M29 37h6l-3 4Z' fill='%23313f39'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <div class="backdrop-blob backdrop-blob--mint" aria-hidden="true"></div>
+    <div class="backdrop-blob backdrop-blob--sun" aria-hidden="true"></div>
+    <div class="backdrop-blob backdrop-blob--sky" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="말잇기 탐험대 처음 화면">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img" focusable="false">
+            <path d="M13 23 23 10l5 12h8l5-12 10 13v17c0 9-7 15-19 15S13 49 13 40Z" fill="currentColor"/>
+            <path d="M22 35c0 8 5 13 10 13s10-5 10-13Z" fill="#fff7ea"/>
+            <circle cx="25" cy="30" r="2.5" fill="#27352f"/>
+            <circle cx="39" cy="30" r="2.5" fill="#27352f"/>
+            <path d="M29 37h6l-3 4Z" fill="#27352f"/>
+            <path d="M18 44c5 3 9 4 14 4s9-1 14-4" fill="none" stroke="#d96946" stroke-linecap="round" stroke-width="3"/>
+          </svg>
+        </span>
+        <span class="brand-copy">
+          <strong>말잇기 탐험대</strong>
+          <span>단어와 뜻을 함께 배워요</span>
+        </span>
+      </a>
+
+      <div class="topbar-actions">
+        <div class="score-chip">
+          <span>이어 간 단어</span>
+          <strong id="scoreValue">0</strong>
+        </div>
+        <div class="score-chip score-chip--best">
+          <span>최고 기록</span>
+          <strong id="bestValue">0</strong>
+        </div>
+        <button class="icon-button" id="soundButton" type="button" aria-label="소리 켜기" aria-pressed="true">
+          <svg class="icon icon--sound-on" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 10v4h3l4 4V6L8 10H5Z" fill="currentColor"/>
+            <path d="M15 9c1.7 1.7 1.7 4.3 0 6M18 6c3.3 3.3 3.3 8.7 0 12" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/>
+          </svg>
+          <svg class="icon icon--sound-off" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 10v4h3l4 4V6L8 10H5Z" fill="currentColor"/>
+            <path d="m16 9 5 6m0-6-5 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/>
+          </svg>
+        </button>
+        <button class="ghost-button" id="rulesButton" type="button">놀이 방법</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="game-card" aria-labelledby="gameTitle">
+        <h1 class="sr-only" id="gameTitle">끝말잇기 놀이</h1>
+        <div class="game-card__top">
+          <span class="turn-badge" id="turnBadge">탐험대장 차례</span>
+          <p class="start-cue">다음 시작 글자 <strong id="startLetter">과</strong></p>
+        </div>
+
+        <div class="mascot-stage">
+          <div class="mascot" id="mascot" aria-hidden="true">
+            <svg viewBox="0 0 160 180" role="img" focusable="false">
+              <ellipse cx="80" cy="164" rx="46" ry="9" fill="#173e33" opacity=".12"/>
+              <path d="M32 72 47 24l30 22h6l30-22 15 48v45c0 32-23 50-48 50S32 149 32 117Z" fill="#ed8a62"/>
+              <path d="M39 67 49 37l20 16h22l20-16 10 30Z" fill="#f6b18d"/>
+              <path d="M48 108c0 34 14 53 32 53s32-19 32-53v-18H48Z" fill="#fff7ea"/>
+              <path d="M47 42 41 19l18 10Z" fill="#d96b48"/>
+              <path d="m113 42 6-23-18 10Z" fill="#d96b48"/>
+              <ellipse cx="62" cy="93" rx="6" ry="7" fill="#27352f"/>
+              <ellipse cx="98" cy="93" rx="6" ry="7" fill="#27352f"/>
+              <circle cx="64" cy="90" r="2" fill="#fff"/>
+              <circle cx="100" cy="90" r="2" fill="#fff"/>
+              <path d="M74 108h12l-6 7Z" fill="#27352f"/>
+              <path d="M69 120c4 5 8 7 11 7s7-2 11-7" fill="none" stroke="#27352f" stroke-linecap="round" stroke-width="3"/>
+              <path d="M51 132c8 4 18 6 29 6s21-2 29-6" fill="none" stroke="#6db89d" stroke-linecap="round" stroke-width="10"/>
+              <path d="M63 144c5 3 11 4 17 4s12-1 17-4" fill="none" stroke="#3e9178" stroke-linecap="round" stroke-width="4" opacity=".7"/>
+              <circle cx="48" cy="105" r="7" fill="#f29a77" opacity=".55"/>
+              <circle cx="112" cy="105" r="7" fill="#f29a77" opacity=".55"/>
+            </svg>
+          </div>
+
+          <div class="speech-card">
+            <div class="speech-card__label-row">
+              <p class="eyebrow" id="speakerLabel">탐험대장의 말</p>
+              <button class="speak-button" id="speakButton" type="button" aria-label="현재 단어와 뜻 듣기" title="단어와 뜻 듣기">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 10v4h3l4 4V6L8 10H5Z" fill="currentColor"/>
+                  <path d="M15 9c1.7 1.7 1.7 4.3 0 6M18 6c3.3 3.3 3.3 8.7 0 12" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/>
+                </svg>
+              </button>
+            </div>
+            <div class="word-row">
+              <h2 id="currentWord">사과</h2>
+              <span class="pos-badge" id="currentPos">명사</span>
+            </div>
+            <p class="meaning" id="currentMeaning">사과나무의 둥글고 달콤한 열매예요.</p>
+            <p class="next-cue" id="nextCue">이제 <strong>과</strong>로 시작하는 단어를 말해 봐요!</p>
+          </div>
+        </div>
+
+        <form class="answer-form" id="answerForm" novalidate>
+          <label class="sr-only" for="answerInput">다음 단어 입력</label>
+          <input id="answerInput" name="answer" type="text" maxlength="16" placeholder="단어를 입력해 주세요" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send">
+          <button class="mic-button" id="micButton" type="button" aria-label="마이크로 단어 말하기" title="마이크로 말해 보세요">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/>
+              <path d="M6 11a6 6 0 0 0 12 0M12 17v4M8 21h8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/>
+            </svg>
+            <span class="mic-ring" aria-hidden="true"></span>
+          </button>
+          <button class="submit-button" id="submitButton" type="submit">내기</button>
+        </form>
+        <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+
+        <div class="helper-row">
+          <button class="text-button" id="hintButton" type="button" aria-controls="hintPanel" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10c1 1 1 2 1 3h6c0-1 0-2 1-3a6 6 0 0 0-4-10Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+            </svg>
+            <span>힌트 보기</span>
+          </button>
+          <button class="text-button" id="restartButton" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 12a8 8 0 1 0 2.3-5.7M4 5v5h5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+            </svg>
+            <span>새로 시작</span>
+          </button>
+        </div>
+
+        <div class="hint-panel" id="hintPanel" hidden>
+          <div class="hint-panel__head">
+            <strong id="hintTitle">이런 단어는 어때요?</strong>
+            <span id="hintNote">단어를 누르면 입력창에 들어가요</span>
+          </div>
+          <ul class="hint-list" id="hintList"></ul>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel dictionary-panel" aria-labelledby="dictionaryTitle">
+          <div class="panel-head">
+            <h2 id="dictionaryTitle">단어 도감</h2>
+            <span class="panel-chip" id="wordCount">0개</span>
+          </div>
+          <label class="search-field" for="dictionaryInput">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/>
+            </svg>
+            <input id="dictionaryInput" type="search" placeholder="궁금한 단어를 찾아보세요" autocomplete="off">
+          </label>
+          <div class="dictionary-results" id="dictionaryResults" aria-live="polite"></div>
+        </section>
+
+        <section class="panel history-panel" aria-labelledby="historyTitle">
+          <div class="panel-head">
+            <h2 id="historyTitle">이야기 기록</h2>
+            <span class="panel-chip" id="historyCount">0</span>
+          </div>
+          <ol class="history-list" id="historyList"></ol>
+          <p class="empty-note" id="historyEmpty">첫 단어를 기다리고 있어요.</p>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <p>단어 도감 <strong id="footerWordCount">0</strong>개 · 두음법칙을 인정해요</p>
+      <p>초등학생을 위한 단어와 뜻이 있는 끝말잇기</p>
+    </footer>
+  </div>
+
+  <dialog class="modal" id="rulesDialog" aria-labelledby="rulesTitle">
+    <div class="modal__head">
+      <div>
+        <p class="eyebrow">놀이 방법</p>
+        <h2 id="rulesTitle">이렇게 놀아요</h2>
+      </div>
+      <button class="icon-button modal__close" type="button" data-close-dialog aria-label="놀이 방법 닫기">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+    <ol class="rules-list">
+      <li>
+        <span class="rule-number">1</span>
+        <div>
+          <strong>앞 단어의 마지막 글자로 시작해요</strong>
+          <p>탐험대장이 낸 단어의 끝 글자를 보고, 그 글자로 시작하는 단어를 말해요.</p>
+        </div>
+      </li>
+      <li>
+        <span class="rule-number">2</span>
+        <div>
+          <strong>단어를 내면 뜻도 함께 보여 줘요</strong>
+          <p>내가 낸 단어도, 탐험대장이 낸 단어도 뜻을 함께 볼 수 있어요. 모르는 단어는 힌트로 배워요.</p>
+        </div>
+      </li>
+      <li>
+        <span class="rule-number">3</span>
+        <div>
+          <strong>두음법칙도 괜찮아요</strong>
+          <p>‘리’로 끝나면 ‘이’로, ‘로’로 끝나면 ‘노’로 이어도 인정해요. 예: 기린 → 인형, 고래 → 내일</p>
+        </div>
+      </li>
+      <li>
+        <span class="rule-number">4</span>
+        <div>
+          <strong>같은 단어는 한 번만 써요</strong>
+          <p>이미 나온 단어를 다시 쓰면 이어지지 않아요. 마이크로 말해도 되고 직접 입력해도 돼요.</p>
+        </div>
+      </li>
+    </ol>
+    <div class="modal__footer">
+      <button class="primary-button" type="button" data-close-dialog>알겠어요</button>
+    </div>
+  </dialog>
+
+  <dialog class="modal modal--win" id="winDialog" aria-labelledby="winTitle">
+    <div class="win-mark" aria-hidden="true">
+      <svg viewBox="0 0 80 80">
+        <path d="m40 6 8.6 17.4L67 26l-13 13 3 19-17-9-17 9 3-19L13 26l18.4-2.6Z" fill="#f4c95d" stroke="#e0a92f" stroke-linejoin="round" stroke-width="3"/>
+        <path d="M32 40l6 6 12-13" fill="none" stroke="#2c7a63" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+      </svg>
+    </div>
+    <p class="eyebrow">오늘의 탐험 결과</p>
+    <h2 id="winTitle">네가 이겼어!</h2>
+    <p class="win-copy" id="winCopy">마지막 글자로 이어 갈 단어를 찾지 못했어요.</p>
+    <div class="win-stats">
+      <div>
+        <span>이어 간 단어</span>
+        <strong id="winScore">0</strong>
+      </div>
+      <div>
+        <span>최고 기록</span>
+        <strong id="winBest">0</strong>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="primary-button" id="playAgainButton" type="button">한 번 더 하기</button>
+      <button class="ghost-button" type="button" data-close-dialog>구경하기</button>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <canvas class="confetti" id="confettiCanvas" aria-hidden="true"></canvas>
+
+  <script src="words.js"></script>
+  <script src="game-core.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
+
